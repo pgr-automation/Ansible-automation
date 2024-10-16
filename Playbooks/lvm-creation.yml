@@ -1,0 +1,53 @@
+---
+
+# Make sure Disk is attached 
+
+- name: create docker partition
+  hosts: all
+  become: true
+  remote_user: root
+
+  tasks:
+  - name: pv create
+    community.general.parted:
+      device: /dev/xvdb
+      number: 1
+      flags: [lvm]
+      state: present
+      part_end: 100%
+  
+  - name: creating vg group vg-docker-data
+    community.general.lvg:
+      vg: vg-docker-data
+      pvs: /dev/xvdb1
+      state: present
+      force: false
+    register: vg_result
+    failed_when: ('unable' in vg_result)
+  
+  - name: creating lv lv-docker-data
+    community.general.lvol:
+      vg: vg-docker-data
+      lv: lv-docker-data
+      size: +100%FREE
+      state: present
+      force: false
+
+  - name: create mount directory
+    ansible.builtin.file:
+      path: /var/lib/docker
+      state: directory
+      mode: '0750'
+    
+  - name: format mount dir with filesystem
+    ansible.builtin.filesystem:
+      fstype: xfs
+      dev: /dev/vg-docker-data/lv-docker-data
+  
+  - name: mount the directory to /var/lib/docker
+    ansible.builtin.mount:
+      path: /var/lib/docker
+      src: /dev/vg-docker-data/lv-docker-data
+      fstype: xfs
+      state: mounted
+  

@@ -26,3 +26,5 @@
 - **Integration with DevOps Tools**: Ansible integrates seamlessly with DevOps tools such as Jenkins, Terraform, and Kubernetes, making it a great choice for continuous delivery pipelines.
 
 Ansible's agentless nature, simplicity, and robust features make it popular for automating IT tasks and managing infrastructure at scale.
+
+
