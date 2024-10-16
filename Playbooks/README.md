@@ -19,3 +19,7 @@ ansible-playbook -i inventory_file playbook.yml --limit hostname
 ```bash
 ansible-playbook -i inventory_file playbook.yml --vault-password-file vault_pass.txt
 ```
+5. Check Playbook Syntax
+```bash
+ansible-playbook --syntax-check playbook.yml
+```
