@@ -1,6 +1,0 @@
----
-- name: Set up Docker storage on logical volume
-  hosts: all
-  become: true
-  roles:
-    - Lvm-role
