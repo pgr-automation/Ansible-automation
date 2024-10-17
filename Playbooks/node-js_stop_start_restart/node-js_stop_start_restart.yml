@@ -1,0 +1,46 @@
+---
+- name: Manage Node.js application using pm2 with su to noderun user
+  hosts: your_target_hosts
+  become: yes
+  serial: 1  # Process one server at a time
+  tasks:
+    - name: Ensure pm2 is installed
+      command: su - noderun -c "npm install -g pm2"
+      become: yes
+
+    - name: Start the Node.js application
+      command: su - noderun -c "pm2 start /path/to/your/app.js"
+      args:
+        chdir: /path/to/your/application/directory
+      become: yes
+      when: app_action == "start"
+
+    - name: Stop the Node.js application
+      command: su - noderun -c "pm2 stop /path/to/your/app.js"
+      args:
+        chdir: /path/to/your/application/directory
+      become: yes
+      when: app_action == "stop"
+
+    - name: Restart the Node.js application
+      command: su - noderun -c "pm2 restart /path/to/your/app.js"
+      args:
+        chdir: /path/to/your/application/directory
+      become: yes
+      when: app_action == "restart"
+
+    - name: Check if Node.js application is running
+      command: su - noderun -c "pm2 list | grep '/path/to/your/app.js'"
+      register: pm2_status
+      failed_when: pm2_status.rc != 0
+      become: yes
+
+    - name: Display application status
+      debug:
+        msg: "The Node.js application is running."
+      when: pm2_status.rc == 0
+
+    - name: Fail the playbook if the application is not running
+      fail:
+        msg: "The Node.js application is NOT running on this server. Aborting."
+      when: pm2_status.rc != 0
