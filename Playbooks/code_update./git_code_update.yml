@@ -1,0 +1,34 @@
+---
+- name: Code release automation
+  hosts: all 
+  become: true
+  remote_user: root
+
+  vars:
+    app_dir: "/var/www/tmp/python_mysql_app"
+    git_repo_url: "https://github.com/prashanthgrebel/frontend_mysql_app.git"
+
+  tasks:
+  - name: Ensure app_dir exist, if not create it.
+    ansible.builtin.file:
+      path: "{{ app_dir }}"
+      state: directory
+      mode: '0755'
+
+  - name: Check if .git directory exists
+    ansible.builtin.stat:
+      path: "{{ app_dir}}/.git"
+    register: git_dir_check
+  
+  - name: Clone repo if .git doesn't exist
+    ansible.builtin.git:
+      repo: "{{ git_repo_url }}"
+      dest: "{{ app_dir }}"
+      version: main 
+    when: not git_dir_check.stat.exists
+  
+  - name: Pull repo if .git exists
+    ansible.builtin.command:
+      cmd: "git pull"
+      chdir: "{{ app_dir}}"
+    when: git_dir_check.stat.exists
