@@ -12,7 +12,7 @@ Roles allow for better organization, easier reuse, and more modularity in comple
 
 A typical Ansible role has the following directory structure:
 
-```plaintext
+```bash
 roles/
   └── <role_name>/
       ├── tasks/
@@ -42,3 +42,11 @@ roles/
 - defaults/: Contains default variables that can be overridden by the user.
 - meta/: Provides metadata about the role (e.g., dependencies).
 - tests/: Includes tests for the role to ensure functionality.
+
+### Create the Role Directory
+
+You can initialize the structure using Ansible Galaxy:
+
+```bash
+ansible-galaxy init nginx
+```
