@@ -1,0 +1,36 @@
+---
+# tasks file for nginx_webserver
+# Install Nginx
+- name: Install Nginx package
+  ansible.builtin.yum:
+    name: nginx
+    state: present
+  notify: restart nginx
+
+# Create directories for each server block
+- name: Create document root directories
+  ansible.builtin.file:
+    path: "{{ item.root }}"
+    state: directory
+  loop: "{{ nginx_server_blocks }}"
+
+# Copy Nginx configuration using Jinja2 template
+- name: Create Nginx configuration file
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+  notify: restart nginx
+
+# Copy index.html to production directory
+- name: Copy index.html
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ item.root }}"
+  loop: "{{ nginx_server_blocks }}"
+  
+# Ensure Nginx is enabled and running
+- name: Ensure Nginx is enabled and running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

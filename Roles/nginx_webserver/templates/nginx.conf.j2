@@ -1,0 +1,17 @@
+server {
+    listen {{ nginx_port }};
+    server_name {{ nginx_server_name }};
+    root {{ nginx_root }};
+}
+
+{% for server in nginx_server_blocks %}
+server {
+    listen {{ nginx_port }};
+    server_name {{ server.server_name }};
+    root {{ server.root }};
+    
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+{% endfor %}
