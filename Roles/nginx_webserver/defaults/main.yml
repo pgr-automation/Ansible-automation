@@ -3,5 +3,5 @@
 # Default configuration for Nginx webserver
 nginx_port: 8080
 nginx_server_name: localhost
-nginx_root: /var/www/pgr-automation
+nginx_root: /var/www/pgr_automation
 

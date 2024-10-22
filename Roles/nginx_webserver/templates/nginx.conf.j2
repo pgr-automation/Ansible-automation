@@ -1,13 +1,14 @@
-server {
-    listen {{ nginx_port }};
-    server_name {{ nginx_server_name }};
-    root {{ nginx_root }};
-}
+#server {
+#    listen {{ nginx_port }};
+#    server_name {{ nginx_server_name }};
+#    root {{ nginx_root }};
+#}
 
 {% for server in nginx_server_blocks %}
 server {
     listen {{ nginx_port }};
-    server_name {{ server.server_name }};
+    #server_name {{ server.server_name }};
+    server_name _;
     root {{ server.root }};
     
     location / {

@@ -1,2 +1,5 @@
 ---
 # vars file for nginx_webserver
+nginx_server_blocks:
+  - server_name: "localhost"
+    root: "/var/www/pgr_automation"

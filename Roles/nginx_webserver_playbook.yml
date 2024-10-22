@@ -1,0 +1,8 @@
+---
+- name: Provisioning Nginx Webserver
+  hosts: webserver
+  become: yes
+  remote_user: ec2-user
+
+  roles:
+    - nginx_webserver

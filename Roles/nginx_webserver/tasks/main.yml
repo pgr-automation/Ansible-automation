@@ -13,24 +13,21 @@
     path: "{{ item.root }}"
     state: directory
   loop: "{{ nginx_server_blocks }}"
+  
+# Copy index.html to production directory
+- name: Copy index.html
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ item.root }}\/index.html"
+  loop: "{{ nginx_server_blocks }}"
 
 # Copy Nginx configuration using Jinja2 template
 - name: Create Nginx configuration file
   ansible.builtin.template:
     src: nginx.conf.j2
-    dest: /etc/nginx/sites-available/default
+    dest: /etc/nginx/conf.d/pgr-automation.conf
   notify: restart nginx
 
-# Copy index.html to production directory
-- name: Copy index.html
-  ansible.builtin.template:
-    src: index.html.j2
-    dest: "{{ item.root }}"
-  loop: "{{ nginx_server_blocks }}"
-  
-# Ensure Nginx is enabled and running
-- name: Ensure Nginx is enabled and running
-  ansible.builtin.service:
-    name: nginx
-    state: started
-    enabled: true
+
+
+
