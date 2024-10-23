@@ -23,11 +23,7 @@
   register: vg_result
   failed_when: ('unable' in vg_result)
 
-# check if lvm is already created (usefull when play book is failed for some reason and you want exicute it again)
-- name: Check if LV exists
-  ansible.builtin.shell: "lvdisplay"
-  register: lv_check
-  ignore_errors: true
+
   
 
 # Create lvm
@@ -37,8 +33,7 @@
     lv: "{{ item.lv_name  }}"
     size: 100%FREE
     state: present
-    force: true
-  #when: "/dev/{{ item.vg_name }}/{{ item.lv_name }} not in lv_check"
+    force: false
   loop: "{{ devices }}"
 
 # Format disk with required filesystem
