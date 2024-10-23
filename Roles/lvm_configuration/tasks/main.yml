@@ -23,9 +23,6 @@
   register: vg_result
   failed_when: ('unable' in vg_result)
 
-
-  
-
 # Create lvm
 - name: Create LV 
   ansible.builtin.lvol:
