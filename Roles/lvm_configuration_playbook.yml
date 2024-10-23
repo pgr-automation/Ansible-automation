@@ -1,0 +1,8 @@
+---
+- name: lvm_configuration 
+  hosts: webserver
+  remote_user: ec2-user
+  become: true
+
+  roles:
+    - lvm_configuration

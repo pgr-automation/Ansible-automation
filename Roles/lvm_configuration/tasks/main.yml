@@ -1,0 +1,66 @@
+---
+# tasks file for lvm_configuration
+
+# Creat PV
+- name: pv create
+  community.general.parted:
+    device: "{{ item.device_name }}"
+    number: 1
+    flags:
+      - lvm
+    state: present
+    part_end: 100%
+  loop: "{{ devices }}"
+
+# Create VG
+- name: vg create
+  community.general.lvg:
+    vg: "{{ item.vg_name }}"
+    pvs: "{{ item.device_name }}1"
+    state: present
+    force: false
+  loop: "{{ devices }}"
+  register: vg_result
+  failed_when: ('unable' in vg_result)
+
+# check if lvm is already created (usefull when play book is failed for some reason and you want exicute it again)
+- name: Check if LV exists
+  ansible.builtin.shell: "lvdisplay"
+  register: lv_check
+  ignore_errors: true
+  
+
+# Create lvm
+- name: Create LV 
+  ansible.builtin.lvol:
+    vg: "{{ item.vg_name }}"
+    lv: "{{ item.lv_name  }}"
+    size: 100%FREE
+    state: present
+    force: true
+  #when: "/dev/{{ item.vg_name }}/{{ item.lv_name }} not in lv_check"
+  loop: "{{ devices }}"
+
+# Format disk with required filesystem
+- name: create filesystem
+  ansible.builtin.filesystem:
+    fstype: "{{ item.file_system_type }}"
+    dev: "/dev/{{ item.vg_name }}/{{ item.lv_name }}"
+  loop: "{{ devices }}"
+
+# Creat mount path
+- name: Creating mount path
+  ansible.builtin.file:
+    path: "{{ item.mount_path }}"
+    state: directory
+    mode: '0750'
+  loop: "{{ devices }}"
+
+# Mount volume to mount path
+- name: mount volume
+  ansible.builtin.mount:
+    path: "{{ item.mount_path  }}"
+    src: "/dev/{{ item.vg_name }}/{{ item.lv_name }}"
+    fstype: "{{ item.file_system_type }}"
+    state: mounted
+  loop: "{{ devices }}"

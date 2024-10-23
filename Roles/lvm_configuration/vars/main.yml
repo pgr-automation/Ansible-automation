@@ -1,0 +1,9 @@
+---
+# vars file for lvm_configuration
+devices:
+  - name: Mentione the disk which need to be created for lvm_configuration
+    device_name: /dev/xvdb
+    vg_name: vg-docker-data
+    lv_name: lv-docker-data
+    mount_path: /var/lib/docker
+    file_system_type: xfs
