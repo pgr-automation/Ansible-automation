@@ -5,8 +5,5 @@
     owner: redis
     group: redis
     mode: 0644
-
-- name: Restart Redis to apply new configuration
-  ansible.builtin.service:
-    name: redis
-    state: restarted
+  notify:
+    - Restart Redis

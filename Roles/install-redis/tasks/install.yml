@@ -2,9 +2,7 @@
   ansible.builtin.yum:
     name: redis
     state: latest
+  notify: 
+    - Start Redis
 
-- name: Ensure Redis service is enabled and started
-  ansible.builtin.service:
-    name: redis
-    state: started
-    enabled: true
+

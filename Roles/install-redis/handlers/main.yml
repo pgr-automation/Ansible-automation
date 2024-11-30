@@ -1,2 +1,12 @@
 ---
 # handlers file for install-redis
+- name: Restart Redis 
+  ansible.builtin.service:
+    name: redis
+    state: restarted
+
+- name: Start Redis
+  ansible.builtin.service:
+    name: redis
+    state: started
+    enabled: true
