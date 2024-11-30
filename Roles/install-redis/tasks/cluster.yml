@@ -1,0 +1,4 @@
+- name: Create Redis cluster
+  shell: |
+    yes "yes" | redis-cli --cluster create {{ redis_nodes | join(' ') }} --cluster-replicas 1
+  when: inventory_hostname == groups['redis'][0]

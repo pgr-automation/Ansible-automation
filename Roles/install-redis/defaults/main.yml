@@ -1,0 +1,12 @@
+---
+# defaults file for install-redis
+redis_bind_address: "0.0.0.0"
+redis_port: 6379
+redis_cluster_enabled: "yes"
+redis_nodes:
+  - 192.168.1.101:6379
+  - 192.168.1.102:6379
+  - 192.168.1.103:6379
+  - 192.168.1.104:6379
+  - 192.168.1.105:6379
+  - 192.168.1.106:6379

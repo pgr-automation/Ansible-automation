@@ -1,0 +1,6 @@
+- name: Setup Redis Cluster
+  hosts: redis
+  become: true
+  roles:
+    - redis
+

@@ -1,0 +1,5 @@
+---
+# tasks file for install-redis
+- include_tasks: install.yml
+- include_tasks: configure.yml
+- include_tasks: cluster.yml

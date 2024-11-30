@@ -1,0 +1,12 @@
+- name: Configure Redis
+  ansible.builtin.template:
+    src: redis.conf.j2
+    dest: /etc/redis/redis.conf
+    owner: redis
+    group: redis
+    mode: 0644
+
+- name: Restart Redis to apply new configuration
+  ansible.builtin.service:
+    name: redis
+    state: restarted
